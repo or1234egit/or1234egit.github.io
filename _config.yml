@@ -1,0 +1,6 @@
+title: Math Notes
+description: A collection of mathematical notes and concepts
+theme: jekyll-theme-minimal
+markdown: kramdown
+kramdown:
+  math_engine: mathjax
