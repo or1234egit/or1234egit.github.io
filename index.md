@@ -26,9 +26,9 @@ Here are some inline equations:
 
 And here are some display equations:
 
-$$ \int_{-\infty}^{\infty} e^{-x^2} \,dx = \sqrt{\pi} $$
+\\[ \int_{-\infty}^{\infty} e^{-x^2} \,dx = \sqrt{\pi} \\]
 
-$$ \frac{d}{dx} e^x = e^x $$
+\\[ \frac{d}{dx} e^x = e^x \\]
 
 ## Recent Notes
 
