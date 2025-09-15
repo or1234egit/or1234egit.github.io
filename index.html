@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>My Math Blog</title>
 
-  <!-- KaTeX: CSS + JS + auto-render -->
+  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <!-- Markdown parser -->
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 
   <style>
     body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
@@ -18,30 +20,26 @@
     .tab { border:1px solid #ccc; background:#f6f6f6; padding:.5rem .75rem; cursor:pointer; }
     .tab.active { background:#fff; border-top:2px solid #0366d6; font-weight:600; }
     #content { background:#fff; border:1px solid #ccc; padding:1rem; min-height: 200px; }
-    .muted { color:#666; }
-    /* make display math breathe a bit */
     .katex-display { margin: 1rem 0; }
   </style>
 </head>
 <body>
 
   <h1>My Math Blog</h1>
-  <p class="muted">Inline math uses <code>$...$</code>; display math uses <code>$$...$$</code>.</p>
+  <p><em>Inline math:</em> <code>$ ... $</code>. <em>Display math:</em> <code>$$ ... $$</code>.</p>
 
-  <!-- Tabs -->
   <div class="tabs" id="tabs">
-    <button class="tab active" data-file="notes/note1.html">Note 1</button>
-    <button class="tab" data-file="notes/note2.html">Note 2</button>
-    <button class="tab" data-file="notes/note3.html">Note 3</button>
-    <button class="tab" data-file="notes/note4.html">Note 4</button>
-    <button class="tab" data-file="notes/note5.html">Note 5</button>
+    <button class="tab active" data-file="notes/note1.md">Note 1</button>
+    <button class="tab" data-file="notes/note2.md">Note 2</button>
+    <button class="tab" data-file="notes/note3.md">Note 3</button>
+    <button class="tab" data-file="notes/note4.md">Note 4</button>
+    <button class="tab" data-file="notes/note5.md">Note 5</button>
   </div>
 
-  <!-- Where the note content is injected -->
   <div id="content">Loading…</div>
 
   <script>
-    // render helper: run KaTeX auto-render on a specific element
+    // Run KaTeX auto-render on a container
     function renderMathIn(el) {
       renderMathInElement(el, {
         delimiters: [
@@ -54,22 +52,24 @@
       });
     }
 
-    // load a note (HTML fragment), inject it, then render the math inside it
     async function loadNote(path) {
       const content = document.getElementById('content');
       content.textContent = "Loading…";
       try {
-        const res = await fetch(path, {cache: "no-cache"});
+        const res = await fetch(path, { cache: "no-cache" });
         if (!res.ok) throw new Error(res.status + " " + res.statusText);
-        const html = await res.text();
+        const md = await res.text();
+        // Convert Markdown → HTML
+        const html = marked.parse(md);
         content.innerHTML = html;
-        renderMathIn(content); // render KaTeX only inside #content
+        // Render math inside the note
+        renderMathIn(content);
       } catch (err) {
-        content.innerHTML = "<p style='color:#c00'>Failed to load note: " + path + "<br>" + err + "</p>";
+        content.innerHTML = "<p style='color:#c00'>Failed to load: " + path + "<br>" + err + "</p>";
       }
     }
 
-    // tab logic
+    // Tabs wiring
     const tabs = document.querySelectorAll('#tabs .tab');
     tabs.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -79,8 +79,8 @@
       });
     });
 
-    // initial load: Note 1
-    loadNote("notes/note1.html");
+    // Initial note
+    loadNote("notes/note1.md");
   </script>
 </body>
 </html>
