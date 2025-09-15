@@ -16,18 +16,25 @@
     body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
            margin: 0; padding: 2rem; line-height: 1.55; background:#fafafa; }
     h1 { margin: 0 0 1rem; }
+    .row { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
     .tabs { display:flex; gap:.5rem; margin:1rem 0; flex-wrap:wrap; }
     .tab { border:1px solid #ccc; background:#f6f6f6; padding:.5rem .75rem; cursor:pointer; }
     .tab.active { background:#fff; border-top:2px solid #0366d6; font-weight:600; }
-    #content { background:#fff; border:1px solid #ccc; padding:1rem; min-height: 200px; }
+    #contentWrap { background:#fff; border:1px solid #ccc; padding:1rem; min-height: 220px; }
+    #content { min-height: 160px; }
     .katex-display { margin: 1rem 0; }
+    .muted { color:#666; }
+    .btn { cursor:pointer; border:1px solid #bbb; background:#f6f6f6; padding:.45rem .75rem; border-radius:6px; }
+    .btn.primary { background:#0366d6; color:#fff; border-color:#0259bb; }
+    .right { margin-left:auto; }
   </style>
 </head>
 <body>
 
   <h1>My Math Blog</h1>
-  <p><em>Inline math:</em> <code>$ ... $</code>. <em>Display math:</em> <code>$$ ... $$</code>.</p>
+  <p class="muted">Inline: <code>$...$</code>. Display: <code>$$...$$</code>.</p>
 
+  <!-- Tabs -->
   <div class="tabs" id="tabs">
     <button class="tab active" data-file="notes/note1.md">Note 1</button>
     <button class="tab" data-file="notes/note2.md">Note 2</button>
@@ -36,10 +43,25 @@
     <button class="tab" data-file="notes/note5.md">Note 5</button>
   </div>
 
-  <div id="content">Loading…</div>
+  <!-- Actions for the current note -->
+  <div class="row" style="margin:.5rem 0 1rem">
+    <span id="notePath" class="muted">notes/note1.md</span>
+    <a id="viewLink" class="btn right" target="_blank" rel="noopener">View on GitHub</a>
+    <a id="editLink" class="btn primary" target="_blank" rel="noopener">Edit on GitHub</a>
+  </div>
+
+  <!-- Content -->
+  <div id="contentWrap">
+    <div id="content">Loading…</div>
+  </div>
 
   <script>
-    // Run KaTeX auto-render on a container
+    // <<< configure your repo here >>>
+    const GITHUB_USER = "or1234egit";
+    const GITHUB_REPO = "or1234egit.github.io";
+    const GITHUB_BRANCH = "main";
+    // <<< end config >>>
+
     function renderMathIn(el) {
       renderMathInElement(el, {
         delimiters: [
@@ -54,22 +76,30 @@
 
     async function loadNote(path) {
       const content = document.getElementById('content');
+      const notePathSpan = document.getElementById('notePath');
+      const viewLink = document.getElementById('viewLink');
+      const editLink = document.getElementById('editLink');
+
+      notePathSpan.textContent = path;
+
+      // Build GitHub URLs for this note
+      const base = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}`;
+      viewLink.href = `${base}/blob/${GITHUB_BRANCH}/${path}`;
+      editLink.href = `${base}/edit/${GITHUB_BRANCH}/${path}`;
+
       content.textContent = "Loading…";
       try {
         const res = await fetch(path, { cache: "no-cache" });
         if (!res.ok) throw new Error(res.status + " " + res.statusText);
         const md = await res.text();
-        // Convert Markdown → HTML
         const html = marked.parse(md);
         content.innerHTML = html;
-        // Render math inside the note
         renderMathIn(content);
       } catch (err) {
         content.innerHTML = "<p style='color:#c00'>Failed to load: " + path + "<br>" + err + "</p>";
       }
     }
 
-    // Tabs wiring
     const tabs = document.querySelectorAll('#tabs .tab');
     tabs.forEach(btn => {
       btn.addEventListener('click', () => {
