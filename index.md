@@ -1,59 +1,73 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}], throwOnError: false});"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Math Notes</title>
 
-# Welcome to My Math Notes
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    // תריץ פעם אחת בלבד אחרי שה-DOM מוכן וכל הסקריפטים ה-Defer נטענו
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$",  right: "$",  display: false },
+          { left: "\\(", right: "\\)", display: false },
+          { left: "\\[", right: "\\]", display: true }
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
 
-Here you can find my collection of mathematical notes and concepts.
+  <!-- Tabs UI styles -->
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.55; padding: 24px; background:#fafafa; }
+    h1,h2,h3 { margin: 0.6em 0 0.3em; }
+    .tabs { display:flex; gap:8px; margin:16px 0 }
+    .tab-btn { padding:8px 12px; border:1px solid #ccc; border-bottom:none; background:#f6f6f6; cursor:pointer }
+    .tab-btn.active { background:#fff; border-top:2px solid #0366d6; font-weight:600 }
+    .tab-panels { border:1px solid #ccc; padding:12px; background:#fff }
+    .tab-panel { display:none }
+    .tab-panel.active { display:block }
+    .muted { color:#666; margin:4px 0 0 }
+    /* אופציונלי: KaTeX display באמצע */
+    .katex-display { margin: 1rem 0; }
+  </style>
+</head>
+<body>
 
-## Test Equations
+<h1>Welcome to My Math Notes</h1>
+<p>Here you can find my collection of mathematical notes and concepts.</p>
 
-Here are some inline equations:
+<h2>Test Equations</h2>
 
-- The formula $E = mc^2$ describes mass-energy equivalence
-- If $x > 0$, then $\sqrt{x^2} = x$
-- The series $\sum_{n=1}^{\infty} \frac{1}{n^2}$ equals $\frac{\pi^2}{6}$
+<p>Here are some inline equations:</p>
+<ul>
+  <li>The formula $E = mc^2$ describes mass-energy equivalence</li>
+  <li>If $x &gt; 0$, then $\sqrt{x^2} = x$</li>
+  <li>The series $\sum_{n=1}^{\infty} \frac{1}{n^2}$ equals $\frac{\pi^2}{6}$</li>
+</ul>
 
-And here are some display equations:
+<p>And here are some display equations:</p>
 
-$$ \int_{-\infty}^{\infty} e^{-x^2} \,dx = \sqrt{\pi} $$
-
-<div class="katex-fallback" data-latex="\\int_{-\\infty}^{\\infty} e^{-x^2} \\,dx = \\sqrt{\\pi}"></div>
+$$ \int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi} $$
 
 $$ \frac{d}{dx} e^x = e^x $$
 
-<div class="katex-fallback" data-latex="\\frac{d}{dx} e^x = e^x"></div>
+<h2>Recent Notes</h2>
+<ul>
+  <li>Coming soon...</li>
+</ul>
 
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-  // Render any fallback display math blocks (in case $$...$$ were stripped)
-  document.querySelectorAll('.katex-fallback').forEach(function(el){
-    var latex = el.getAttribute('data-latex');
-    if (latex && window.katex) {
-      katex.render(latex, el, {displayMode: true, throwOnError: false});
-    }
-  });
-});
-</script>
-
-## Recent Notes
-
-- [Coming soon...]
-
-<!-- Tabs UI for categories -->
-<style>
-.tabs {display:flex;gap:8px;margin:16px 0}
-.tab-btn {padding:8px 12px;border:1px solid #ccc;border-bottom:none;background:#f6f6f6;cursor:pointer}
-.tab-btn.active {background:white;border-top:2px solid #0366d6;font-weight:600}
-.tab-panels {border:1px solid #ccc;padding:12px;background:white}
-.tab-panel {display:none}
-.tab-panel.active {display:block}
-.summary-link {margin:8px 0}
-</style>
-
+<!-- Tabs UI -->
 <div class="tabs" role="tablist">
-  <button class="tab-btn active" data-tab="algebra">Algebra</button>
-  <button class="tab-btn" data-tab="calculus">Calculus</button>
+  <button class="tab-btn active" data-tab="algebra" type="button">Algebra</button>
+  <button class="tab-btn" data-tab="calculus" type="button">Calculus</button>
 </div>
 <div class="tab-panels">
   <div id="algebra" class="tab-panel active">
@@ -75,14 +89,16 @@ document.addEventListener('DOMContentLoaded', function(){
 </div>
 
 <script>
-document.querySelectorAll('.tab-btn').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById(btn.dataset.tab).classList.add('active');
+  // Tabs logic
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
   });
-});
 </script>
 
-<!-- end Tabs UI -->
+</body>
+</html>
