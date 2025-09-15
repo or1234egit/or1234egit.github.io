@@ -58,7 +58,7 @@ layout: none
 
 $$ \int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi} $$
 
-$$ \frac{d}{dx} e^x + 1 = e^x $$
+$$ \frac{d}{dx} e^x = e^x $$
 
 <h2>Recent Notes</h2>
 <ul>
