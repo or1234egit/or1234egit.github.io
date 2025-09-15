@@ -2,3 +2,12 @@ title: Math Notes
 description: A collection of mathematical notes and concepts
 theme: jekyll-theme-cayman
 markdown: kramdown
+
+kramdown:
+  input: GFM
+  math_engine: null      # מבטל עיבוד מתמטי ע"י kramdown/MathJax
+  hard_wrap: false
+  parse_block_html: true
+  parse_span_html: true
+  syntax_highlighter_opts:
+    disable: true        # אופציונלי – שלא "ידגיש קוד" בתוך נוסחאות

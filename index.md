@@ -1,3 +1,7 @@
+---
+layout: none
+---
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -5,12 +9,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>My Math Notes</title>
 
-  <!-- KaTeX -->
+  <!-- KaTeX (client-side only) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
   <script>
-    // תריץ פעם אחת בלבד אחרי שה-DOM מוכן וכל הסקריפטים ה-Defer נטענו
     document.addEventListener("DOMContentLoaded", function () {
       renderMathInElement(document.body, {
         delimiters: [
@@ -24,7 +27,6 @@
     });
   </script>
 
-  <!-- Tabs UI styles -->
   <style>
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.55; padding: 24px; background:#fafafa; }
     h1,h2,h3 { margin: 0.6em 0 0.3em; }
@@ -35,7 +37,6 @@
     .tab-panel { display:none }
     .tab-panel.active { display:block }
     .muted { color:#666; margin:4px 0 0 }
-    /* אופציונלי: KaTeX display באמצע */
     .katex-display { margin: 1rem 0; }
   </style>
 </head>
