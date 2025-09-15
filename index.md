@@ -2,17 +2,13 @@
 
 Here you can find my collection of mathematical notes and concepts.
 
-## Sample Math Equations
+## Test Equations
 
-Using dollar signs:
-When $a \ne 0$, there are two solutions to $ax^2 + bx + c = 0$ and they are:
+Here is an inline equation: $E = mc^2$
 
-$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+And here is a display equation:
 
-Using LaTeX delimiters:
-When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are:
-
-\[ x = {-b \pm \sqrt{b^2-4ac} \over 2a} \]
+$$ \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi} $$
 
 ## Recent Notes
 
