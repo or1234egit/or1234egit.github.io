@@ -14,76 +14,131 @@
 
   <style>
     :root {
-      --accent: #0366d6;
-      --bg: #f4f7fb;
-      --tab-bg: #e6ebf4;
-      --tab-active-bg: #fff;
-      --border: #cbd5e0;
-      --text: #222;
+      --accent: #2563eb;  /* deep blue */
+      --accent-hover: #1e40af;
+      --bg: #f9fafb;
+      --border: #e5e7eb;
+      --text: #111827;
     }
+
     body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
       padding: 2rem;
-      line-height: 1.6;
       background: var(--bg);
       color: var(--text);
+      line-height: 1.6;
     }
-    h1 { margin-bottom: 1rem; font-size: 1.8rem; }
-    .muted { color:#555; font-size:.9rem; }
+
+    h1 {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    .muted {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    /* Tabs */
     .tabs {
       display: flex;
-      flex-wrap: wrap;
-      gap: .5rem;
-      margin: 1.5rem 0;
+      gap: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin: 2rem 0 1rem;
     }
     .tab {
-      border: 1px solid var(--border);
-      background: var(--tab-bg);
-      padding: .5rem 1rem;
-      border-radius: 999px;
+      background: none;
+      border: none;
+      font: inherit;
+      color: var(--text);
+      padding: .5rem 0;
       cursor: pointer;
-      transition: all .2s ease;
-      font-weight: 500;
+      position: relative;
     }
-    .tab:hover { background: #d1d9ec; }
-    .tab.active {
+    .tab::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 2px;
       background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-      box-shadow: 0 2px 6px rgba(0,0,0,.2);
+      transition: width .25s ease;
     }
-    .row { display:flex; gap:.5rem; align-items:center; margin:.5rem 0 1rem; }
-    .row .right { margin-left:auto; }
+    .tab:hover::after { width: 100%; }
+    .tab.active {
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .tab.active::after {
+      width: 100%;
+    }
+
+    /* Actions */
+    .row {
+      display: flex;
+      align-items: center;
+      margin: .5rem 0 1.5rem;
+      gap: 0.5rem;
+    }
+    .row .right { margin-left: auto; }
+
     .btn {
-      display:inline-block; padding:.45rem .9rem;
-      border:1px solid var(--border); border-radius:6px;
-      background:#fff; text-decoration:none; color:var(--text);
-      transition: all .2s ease;
+      padding: .4rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.9rem;
+      transition: background .2s ease, border-color .2s ease;
     }
-    .btn:hover { background:#f0f0f0; }
-    .btn.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
-    .btn.primary:hover { background:#024a9d; }
+    .btn:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+    }
+    .btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .btn.primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    /* Content */
     #contentWrap {
-      background:#fff; border:1px solid var(--border);
-      border-radius: 8px;
-      padding:1.5rem; min-height:220px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2rem;
+      min-height: 240px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
       transition: background .3s ease;
     }
-    .katex-display { margin: 1rem 0; }
-    code { background:#eee; padding:0 .25rem; border-radius:4px; }
+
+    .katex-display {
+      margin: 1rem 0;
+    }
+
+    code {
+      background: #f3f4f6;
+      padding: 0 .25rem;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
   </style>
 </head>
 <body>
 
   <h1>My Math Blog</h1>
-  <p class="muted">Inline math: <code>$...$</code> &nbsp; • &nbsp; Display math: <code>$$...$$</code></p>
+  <p class="muted">Inline math: <code>$...$</code> • Display math: <code>$$...$$</code></p>
 
-  <!-- Tabs (populated dynamically) -->
   <div class="tabs" id="tabs"></div>
 
-  <!-- Current note actions -->
   <div class="row">
     <span id="notePath" class="muted"></span>
     <a id="viewLink" class="btn right" target="_blank" rel="noopener">View on GitHub</a>
@@ -93,13 +148,10 @@
   <div id="contentWrap"><div id="content">Loading…</div></div>
 
   <script>
-    // === configure your repo ===
     const GITHUB_USER   = "or1234egit";
-    const GITHUB_REPO   = "or1234egit.github.io"; // or your project repo if notes live there
+    const GITHUB_REPO   = "or1234egit.github.io";
     const GITHUB_BRANCH = "main";
-    // ===========================
 
-    // list of notes
     const notes = [
       "notes/note1.md",
       "notes/note2.md",
@@ -140,7 +192,6 @@
         content.innerHTML = html;
         renderMathIn(content);
 
-        // update tab label to note title if not already
         const h2 = content.querySelector("h1,h2,h3,h4,h5,h6");
         if (h2) {
           const tab = document.querySelector(`.tab[data-file='${path}']`);
@@ -151,13 +202,12 @@
       }
     }
 
-    // build tabs
     const tabs = document.getElementById('tabs');
     notes.forEach((path, i) => {
       const btn = document.createElement("button");
       btn.className = "tab" + (i === 0 ? " active" : "");
       btn.dataset.file = path;
-      btn.textContent = "Note " + (i+1); // temporary, replaced after load
+      btn.textContent = "Note " + (i+1); // replaced once note loads
       btn.addEventListener("click", () => {
         document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -166,7 +216,6 @@
       tabs.appendChild(btn);
     });
 
-    // load first note
     loadNote(notes[0]);
   </script>
 </body>
