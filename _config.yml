@@ -1,3 +1,4 @@
 title: Math Notes
 description: A collection of mathematical notes and concepts
 theme: jekyll-theme-cayman
+markdown: kramdown
