@@ -1,16 +1,6 @@
-<script>
-window.MathJax = {
-  tex: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$'], ['\\[','\\]']],
-    processEscapes: true
-  },
-  options: {
-    skipHtmlTags: ['script','noscript','style','textarea','pre','code']
-  }
-};
-</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}], throwOnError: false});"></script>
 
 # Welcome to My Math Notes
 
@@ -26,9 +16,9 @@ Here are some inline equations:
 
 And here are some display equations:
 
-\[ \int_{-\infty}^{\infty} e^{-x^2} \,dx = \sqrt{\pi} \]
+$$ \int_{-\infty}^{\infty} e^{-x^2} \,dx = \sqrt{\pi} $$
 
-\[ \frac{d}{dx} e^x = e^x \]
+$$ \frac{d}{dx} e^x = e^x $$
 
 ## Recent Notes
 
