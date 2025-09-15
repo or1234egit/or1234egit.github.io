@@ -39,3 +39,50 @@ document.addEventListener('DOMContentLoaded', function(){
 ## Recent Notes
 
 - [Coming soon...]
+
+<!-- Tabs UI for categories -->
+<style>
+.tabs {display:flex;gap:8px;margin:16px 0}
+.tab-btn {padding:8px 12px;border:1px solid #ccc;border-bottom:none;background:#f6f6f6;cursor:pointer}
+.tab-btn.active {background:white;border-top:2px solid #0366d6;font-weight:600}
+.tab-panels {border:1px solid #ccc;padding:12px;background:white}
+.tab-panel {display:none}
+.tab-panel.active {display:block}
+.summary-link {margin:8px 0}
+</style>
+
+<div class="tabs" role="tablist">
+  <button class="tab-btn active" data-tab="algebra">Algebra</button>
+  <button class="tab-btn" data-tab="calculus">Calculus</button>
+</div>
+<div class="tab-panels">
+  <div id="algebra" class="tab-panel active">
+    <h3>Algebra</h3>
+    <p>Short notes and links for algebra topics.</p>
+    <div class="summary-link">
+      <a href="/notes/algebra/linear-algebra.html">Linear Algebra — Vectors and Matrices</a>
+      <p class="muted">Dot product, matrices, and examples.</p>
+    </div>
+  </div>
+  <div id="calculus" class="tab-panel">
+    <h3>Calculus</h3>
+    <p>Short notes and links for calculus topics.</p>
+    <div class="summary-link">
+      <a href="/notes/calculus/intro-calculus.html">Intro to Calculus — Derivatives</a>
+      <p class="muted">Derivatives and rules with examples.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+</script>
+
+<!-- end Tabs UI -->
