@@ -13,54 +13,100 @@
   <script defer src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 
   <style>
-    body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-           margin: 0; padding: 2rem; line-height: 1.55; background:#fafafa; }
-    h1 { margin: 0 0 1rem; }
-    .row { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
-    .tabs { display:flex; gap:.5rem; margin:1rem 0; flex-wrap:wrap; }
-    .tab { border:1px solid #ccc; background:#f6f6f6; padding:.5rem .75rem; cursor:pointer; }
-    .tab.active { background:#fff; border-top:2px solid #0366d6; font-weight:600; }
-    #contentWrap { background:#fff; border:1px solid #ccc; padding:1rem; min-height: 220px; }
-    #content { min-height: 160px; }
+    :root {
+      --accent: #0366d6;
+      --bg: #f4f7fb;
+      --tab-bg: #e6ebf4;
+      --tab-active-bg: #fff;
+      --border: #cbd5e0;
+      --text: #222;
+    }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+    }
+    h1 { margin-bottom: 1rem; font-size: 1.8rem; }
+    .muted { color:#555; font-size:.9rem; }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin: 1.5rem 0;
+    }
+    .tab {
+      border: 1px solid var(--border);
+      background: var(--tab-bg);
+      padding: .5rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .2s ease;
+      font-weight: 500;
+    }
+    .tab:hover { background: #d1d9ec; }
+    .tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    }
+    .row { display:flex; gap:.5rem; align-items:center; margin:.5rem 0 1rem; }
+    .row .right { margin-left:auto; }
+    .btn {
+      display:inline-block; padding:.45rem .9rem;
+      border:1px solid var(--border); border-radius:6px;
+      background:#fff; text-decoration:none; color:var(--text);
+      transition: all .2s ease;
+    }
+    .btn:hover { background:#f0f0f0; }
+    .btn.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .btn.primary:hover { background:#024a9d; }
+    #contentWrap {
+      background:#fff; border:1px solid var(--border);
+      border-radius: 8px;
+      padding:1.5rem; min-height:220px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      transition: background .3s ease;
+    }
     .katex-display { margin: 1rem 0; }
-    .muted { color:#666; }
-    .btn { cursor:pointer; border:1px solid #bbb; background:#f6f6f6; padding:.45rem .75rem; border-radius:6px; }
-    .btn.primary { background:#0366d6; color:#fff; border-color:#0259bb; }
-    .right { margin-left:auto; }
+    code { background:#eee; padding:0 .25rem; border-radius:4px; }
   </style>
 </head>
 <body>
 
   <h1>My Math Blog</h1>
-  <p class="muted">Inline: <code>$...$</code>. Display: <code>$$...$$</code>.</p>
+  <p class="muted">Inline math: <code>$...$</code> &nbsp; • &nbsp; Display math: <code>$$...$$</code></p>
 
-  <!-- Tabs -->
-  <div class="tabs" id="tabs">
-    <button class="tab active" data-file="notes/note1.md">Note 1</button>
-    <button class="tab" data-file="notes/note2.md">Note 2</button>
-    <button class="tab" data-file="notes/note3.md">Note 3</button>
-    <button class="tab" data-file="notes/note4.md">Note 4</button>
-    <button class="tab" data-file="notes/note5.md">Note 5</button>
-  </div>
+  <!-- Tabs (populated dynamically) -->
+  <div class="tabs" id="tabs"></div>
 
-  <!-- Actions for the current note -->
-  <div class="row" style="margin:.5rem 0 1rem">
-    <span id="notePath" class="muted">notes/note1.md</span>
+  <!-- Current note actions -->
+  <div class="row">
+    <span id="notePath" class="muted"></span>
     <a id="viewLink" class="btn right" target="_blank" rel="noopener">View on GitHub</a>
     <a id="editLink" class="btn primary" target="_blank" rel="noopener">Edit on GitHub</a>
   </div>
 
-  <!-- Content -->
-  <div id="contentWrap">
-    <div id="content">Loading…</div>
-  </div>
+  <div id="contentWrap"><div id="content">Loading…</div></div>
 
   <script>
-    // <<< configure your repo here >>>
-    const GITHUB_USER = "or1234egit";
-    const GITHUB_REPO = "or1234egit.github.io";
+    // === configure your repo ===
+    const GITHUB_USER   = "or1234egit";
+    const GITHUB_REPO   = "or1234egit.github.io"; // or your project repo if notes live there
     const GITHUB_BRANCH = "main";
-    // <<< end config >>>
+    // ===========================
+
+    // list of notes
+    const notes = [
+      "notes/note1.md",
+      "notes/note2.md",
+      "notes/note3.md",
+      "notes/note4.md",
+      "notes/note5.md"
+    ];
 
     function renderMathIn(el) {
       renderMathInElement(el, {
@@ -81,8 +127,6 @@
       const editLink = document.getElementById('editLink');
 
       notePathSpan.textContent = path;
-
-      // Build GitHub URLs for this note
       const base = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}`;
       viewLink.href = `${base}/blob/${GITHUB_BRANCH}/${path}`;
       editLink.href = `${base}/edit/${GITHUB_BRANCH}/${path}`;
@@ -95,22 +139,35 @@
         const html = marked.parse(md);
         content.innerHTML = html;
         renderMathIn(content);
+
+        // update tab label to note title if not already
+        const h2 = content.querySelector("h1,h2,h3,h4,h5,h6");
+        if (h2) {
+          const tab = document.querySelector(`.tab[data-file='${path}']`);
+          if (tab) tab.textContent = h2.textContent;
+        }
       } catch (err) {
         content.innerHTML = "<p style='color:#c00'>Failed to load: " + path + "<br>" + err + "</p>";
       }
     }
 
-    const tabs = document.querySelectorAll('#tabs .tab');
-    tabs.forEach(btn => {
-      btn.addEventListener('click', () => {
-        tabs.forEach(b => b.classList.remove('active'));
+    // build tabs
+    const tabs = document.getElementById('tabs');
+    notes.forEach((path, i) => {
+      const btn = document.createElement("button");
+      btn.className = "tab" + (i === 0 ? " active" : "");
+      btn.dataset.file = path;
+      btn.textContent = "Note " + (i+1); // temporary, replaced after load
+      btn.addEventListener("click", () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        loadNote(btn.dataset.file);
+        loadNote(path);
       });
+      tabs.appendChild(btn);
     });
 
-    // Initial note
-    loadNote("notes/note1.md");
+    // load first note
+    loadNote(notes[0]);
   </script>
 </body>
 </html>
