@@ -18,7 +18,23 @@ And here are some display equations:
 
 $$ \int_{-\infty}^{\infty} e^{-x^2} \,dx = \sqrt{\pi} $$
 
+<div class="katex-fallback" data-latex="\\int_{-\\infty}^{\\infty} e^{-x^2} \\,dx = \\sqrt{\\pi}"></div>
+
 $$ \frac{d}{dx} e^x = e^x $$
+
+<div class="katex-fallback" data-latex="\\frac{d}{dx} e^x = e^x"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  // Render any fallback display math blocks (in case $$...$$ were stripped)
+  document.querySelectorAll('.katex-fallback').forEach(function(el){
+    var latex = el.getAttribute('data-latex');
+    if (latex && window.katex) {
+      katex.render(latex, el, {displayMode: true, throwOnError: false});
+    }
+  });
+});
+</script>
 
 ## Recent Notes
 
